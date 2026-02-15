@@ -56,3 +56,39 @@ class SnakeGameAI:
 
             if self.food not in self.snake:
                 break
+    
+    def play_step(self, action):
+        self.frame_iteration += 1
+
+        # user input
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        
+        # move
+        self._move(action)
+        self.snake.insert(0, self.head)
+
+        # check if game over?
+        reward = 0
+        game_over = False
+        if self.is_collision() or self.frame_iteration > 100*len(self.snake):
+            game_over = True
+            reward = -10
+            return reward, game_over, self.score
+        
+        # place new food or just move
+        if self.head == self.food:
+            self.score += 1
+            reward = 10
+            self.place_food()
+        else:
+            self.snake.pop()
+
+        # update ui and clock
+        self._update_ui()
+        self.clock.tick(SPEED)
+        # return game over and score
+        return reward, game_over, self.score
+        
