@@ -2,6 +2,7 @@ import random
 import pygame
 from enum import Enum
 from collections import namedtuple
+import numpy as np 
 
 pygame.init()
 
