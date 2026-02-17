@@ -18,6 +18,7 @@ class Agent:
         self.espilon = 0 # randomness
         self.gamma = 0 # discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
+        print(f"Agent initialized with max memory {MAX_MEMORY}\n Batch size {BATCH_SIZE}\n Learning rate {LR}")
         #TODO: model and trainer 
 
 
@@ -37,7 +38,52 @@ class Agent:
         pass
 
 def train():
-    
+    # initialize plot scores and agent
+    plot_scores = []
+    plot_mean_scores = []
+    total_score = 0
+    record = 0
+    agent = Agent()
+    game = SnakeGameAI()
+    # training loop
+    while True: 
+        # get the old state 
+        state_old = agent.get_state(game)
+        print(f"State old: {state_old}")
+
+        # get the move based on current state 
+        final_move = agent.get_action(state_old)
+        print(f"Final move: {final_move}")
+
+        # perform the move and get the new state 
+        reward, done, score = game.play_step(final_move)
+        print(f"Reward: {reward}, Done: {done}, Score: {score}")
+        state_new = agent.get_state(game)
+        print(f"State new: {state_new}")
+
+        # train the short memory for 1 step 
+        agent.train_short_memory(state_old, final_move, reward, state_new, done)
+
+        # remember 
+        agent.remember(state_old, final_move, reward, state_new, done)
+        if done: 
+            # train the long memory, plot the result 
+            game.reset()
+            agent.number_of_games += 1
+            agent.train_long_memory()
+
+            if score > record:
+                record = score
+                # agent.model.save()
+            print('Game', agent.number_of_games, 'Score', score, 'Record:', record)
+        
+        # TODO: plotting 
+        
+
+
+
+
+
 
 if __name__ == "__main__":
     train()
