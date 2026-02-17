@@ -14,7 +14,12 @@ LR = 0.001
 class Agent:
 
     def __init__(self):
-        pass 
+        self.number_of_games = 0
+        self.espilon = 0 # randomness
+        self.gamma = 0 # discount rate
+        self.memory = deque(maxlen=MAX_MEMORY) # popleft()
+        #TODO: model and trainer 
+
 
     def get_state(self, game): 
         pass
@@ -32,8 +37,7 @@ class Agent:
         pass
 
 def train():
-    pass
+    
 
 if __name__ == "__main__":
     train()
-    
