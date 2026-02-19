@@ -66,8 +66,9 @@ class Agent:
             game.food.y < game.head.y, # food up
             game.food.y > game.food.y # food down 
         ]
-
-        pass
+        
+        return np.array(state, dtype=int)
+    
 
     def remember(self, state, action, reward, next_state, done):
         pass
